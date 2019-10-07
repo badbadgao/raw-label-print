@@ -7,27 +7,17 @@ import {
   Route,
 } from "react-router-dom";
 
-
-const Home = () => (
-  <div>
-  </div>
-);
-
-const Public = ({match}) => (
-  <div>Public{match.params.name}</div>
-);
-
-const User = () => (
-  <div>User</div>
+const Main = ({match}) => (
+  <>
+    <div>Your printer is: {match.params.printer}</div>
+    <PrintPanel />
+  </>
 );
 
 const App = () => {
   return (
     <Router>
-      <PrintPanel />
-      <Route path="/" exact component={Home} />
-      <Route path="/public/:name" component={Public} />
-      <Route path="/login" component={User} />
+      <Route path="/raw-label-print/:printer" component={Main} />
     </Router>
   );
 }
