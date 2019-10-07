@@ -3,6 +3,19 @@ import { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import fetchApi from './fetchApi';
+
+const printLabel = () => {
+  var dummyReceipt = { mmsBarcode: "100-1-20000-3", supplierBarcode: "123456789" };
+  var dummyPrint = { copies: 1, labelId: "100-1-20000-3", printerName: "RECEIVING PRINTER" }
+
+  fetchApi('/').post('raw-label-print/api/receipt', dummyReceipt).then(() => {
+    console.log('HEY');
+    fetchApi('/').post('raw-label-print/api/print', dummyPrint).then((result) => {
+      console.log(JSON.stringify(result));
+    });
+  });
+};
 
 const useStyles = makeStyles(theme => ({
   firstRowContainer: {
@@ -105,7 +118,7 @@ const PrintPanel = () => {
         />
       </div>
       <div className={classes.thirdRowContainer}>
-        <Button variant="contained" size="large" color="primary" className={classes.button}>
+        <Button variant="contained" size="large" color="primary" className={classes.button} onClick={printLabel}>
           Print
         </Button>
       </div>

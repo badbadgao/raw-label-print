@@ -1,5 +1,4 @@
 import { fetch } from 'whatwg-fetch';
-import { GET, POST, PUT, DELETE } from './requestType';
 
 // const HOST_NAME = 'http://localhost:8090';
 
@@ -26,17 +25,16 @@ const headers = (type, bodyObj) => {
 const request = (hostName, uri, headers) => new Promise(
 	(resolve, reject) => {
 		fetch(`${hostName}${uri}`, headers)
-			.then(response => response.json())
 			.then(result => resolve(result))
 			.catch(error => reject(error));
 	}
 )
 
 const fetchApi = (hostName = '/' ) => ({
-	put: (uri, bodyObj) => request(hostName, uri, headers(PUT, bodyObj)),
-	post: (uri, bodyObj) => request(hostName, uri, headers(POST, bodyObj)),
+	put: (uri, bodyObj) => request(hostName, uri, headers('PUT', bodyObj)),
+	post: (uri, bodyObj) => request(hostName, uri, headers('POST', bodyObj)),
 	get: uri => request(hostName, uri),
-	delete: uri => request(hostName, uri, headers(DELETE)),
+	delete: uri => request(hostName, uri, headers('DELETE')),
 })
 
 export default fetchApi;
