@@ -8,10 +8,7 @@ import {
 } from "react-router-dom";
 
 const Main = ({match}) => (
-  <>
-    <div>Your printer is: {match.params.printer}</div>
-    <PrintPanel />
-  </>
+  <PrintPanel printerName={match.params.printer}/>
 );
 
 const App = () => {
