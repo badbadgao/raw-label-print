@@ -1,5 +1,7 @@
 import React from 'react';
 import './App.css';
+import PrintPanel from './PrintPanel';
+
 import {
   BrowserRouter as Router,
   Route,
@@ -8,7 +10,6 @@ import {
 
 const Home = () => (
   <div>
-    Home
   </div>
 );
 
@@ -23,6 +24,7 @@ const User = () => (
 const App = () => {
   return (
     <Router>
+      <PrintPanel />
       <Route path="/" exact component={Home} />
       <Route path="/public/:name" component={Public} />
       <Route path="/login" component={User} />
