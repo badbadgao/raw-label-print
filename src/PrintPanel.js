@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import fetchApi from './fetchApi';  
+import QueryLoading from './QueryLoading';
 
 const useStyles = makeStyles(theme => ({
   firstRowContainer: {
@@ -45,12 +46,20 @@ const PrintPanel = () => {
   const [quantity, setQuantity] = useState('');
   const [supplierBarcode, setSupplierBarcode] = useState('');
   const [copies, setCopies] = useState(1);
+  const [queryStatus, setQueryStatus] = useState('ready');
+  const [inputDisabled, setInputDisabled] = useState(false);
 
-  const handleChange = (event) => {
-    console.log(event.target.value);
+  const getQueryStatus = () => {
+    console.log(queryStatus);
+    return queryStatus;
   }
-  
+
   const submit = () => {
+    console.log('previous status:' + queryStatus);
+    setQueryStatus('progress');
+    console.log("current status:"+ queryStatus);
+    setInputDisabled(true);
+
     const labelId = [poNumber, lineNumber, quantity, unitNumber].join('-');
     const jsonRequest1 = {};
     jsonRequest1['mmsBarcode'] = labelId;
@@ -62,10 +71,31 @@ const PrintPanel = () => {
     jsonRequest2['copies'] = copies;
     jsonRequest2['printName'] = "PrintName";
     console.log(jsonRequest2);
+
+    setTimeout(() => {
+      setInputDisabled(false);
+      setQueryStatus('success');
+      // setTimeout(() => {
+      //   console.log("get Query status" + getQueryStatus());
+      //   console.log("direct query status: " + queryStatus);
+      //   if (getQueryStatus() === 'success') {
+      //     // console.log("the status is" + queryStatus)
+      //     setQueryStatus('ready');
+      //   }
+      // }, 4000));
+      setTimeout(() => {
+        console.log("direct query status: " + queryStatus);
+        console.log("get Query status" + getQueryStatus());
+        if (getQueryStatus() === 'success') {
+          console.log("the status is" + queryStatus)
+          setQueryStatus('ready');
+        }
+      }, 4000);
+    }, 2000);
   }
 
-    return (
-      <div>
+  return (
+    <>
       <div className={classes.firstRowContainer}>
         <TextField
           required
@@ -76,6 +106,7 @@ const PrintPanel = () => {
           onChange={(event) => setPoNumber(event.target.value)}
           margin="normal"
           variant="outlined"
+          disabled={inputDisabled}
         />
         <TextField
           required
@@ -86,6 +117,7 @@ const PrintPanel = () => {
           onChange={(event) => setLineNumber(event.target.value)}
           margin="normal"
           variant="outlined"
+          disabled={inputDisabled}
         />
         <TextField
           required
@@ -96,6 +128,7 @@ const PrintPanel = () => {
           onChange={(event) => setQuantity(event.target.value)}
           margin="normal"
           variant="outlined"
+          disabled={inputDisabled}
         />
         <TextField
           required
@@ -106,9 +139,10 @@ const PrintPanel = () => {
           className={classes.textField}
           margin="normal"
           variant="outlined"
+          disabled={inputDisabled}
         />
-       </div>
-       <div className={classes.secondRowContainer}>
+      </div>
+      <div className={classes.secondRowContainer}>
         <TextField
           required
           fullWidth
@@ -119,6 +153,7 @@ const PrintPanel = () => {
           onChange={(event) => setSupplierBarcode(event.target.value)}
           margin="normal"
           variant="outlined"
+          disabled={inputDisabled}
         />
         <TextField
           required
@@ -129,15 +164,23 @@ const PrintPanel = () => {
           onChange={(event) => setCopies(event.target.value)}
           margin="normal"
           variant="outlined"
+          disabled={inputDisabled}
         />
       </div>
       <div className={classes.thirdRowContainer}>
-        <Button variant="contained" size="large" color="primary" className={classes.button} onClick={submit}>
+        <Button 
+          variant="contained"
+          size="large" 
+          color="primary" 
+          className={classes.button} 
+          onClick={submit}
+          disabled={inputDisabled}
+        >
           Print
         </Button>
       </div>
-    </div>
-  )
-}
+      <QueryLoading queryStatus={queryStatus} />
+  </>
+)}
 
 export default PrintPanel;
